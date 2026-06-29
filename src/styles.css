@@ -298,6 +298,8 @@ body {
 
   /* 최근 10회차 / 저장한 조합 — 라벨을 위로, 공은 아래 전체폭 한 줄 */
   .row:has(.balls-sm) { flex-direction: column; align-items: flex-start; gap: 8px; }
+  /* 회차 + 추첨일을 한 줄로 */
+  .row:has(.balls-sm) .row-lead { flex-direction: row; align-items: baseline; gap: 8px; min-width: 0; }
   .row:has(.balls-sm) .balls-sm { flex-wrap: nowrap; gap: 6px; }
   .row:has(.balls-sm) .balls-sm .ball { width: 30px; height: 30px; font-size: 13px; }
 }
