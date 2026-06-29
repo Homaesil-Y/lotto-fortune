@@ -76,6 +76,8 @@ export default function App() {
   const [gapView, setGapView] = useState<5 | 10>(10); // 미출현 기간 버킷 (기본 10회)
   const [pipe, setPipe] = useState<PipelineResult | null>(null); // 9단계 파이프라인 결과
   const [pipeRoll, setPipeRoll] = useState(0); // 고급 추천 공 애니메이션 재생용
+  const [excluded, setExcluded] = useState<number[]>([]); // 제외 숫자 (최대 6)
+  const [exInput, setExInput] = useState("");
   const [back, setBack] = useState<BacktestResult | null>(null); // 백테스트 결과
   const [backRunning, setBackRunning] = useState(false);
 
@@ -151,8 +153,20 @@ export default function App() {
     );
   if (!stats) return <div className="content"><p className="empty">불러오는 중…</p></div>;
 
-  const onRecommend = () => { setRec(recommend(filtered, mode)); setCopied(false); setRollId((v) => v + 1); };
-  const onRunPipeline = () => { setPipe(runPipeline(filtered)); setPipeRoll((v) => v + 1); };
+  const onRecommend = () => { setRec(recommend(filtered, mode, excluded)); setCopied(false); setRollId((v) => v + 1); };
+  const onRunPipeline = () => { setPipe(runPipeline(filtered, excluded)); setPipeRoll((v) => v + 1); };
+
+  // 제외 숫자 추가/삭제 (변경 시 기존 추천 결과는 초기화해 혼동 방지)
+  const addExclude = () => {
+    const n = parseInt(exInput, 10);
+    if (!Number.isInteger(n) || n < 1 || n > 45 || excluded.includes(n) || excluded.length >= 6) return;
+    setExcluded([...excluded, n].sort((a, b) => a - b));
+    setExInput("");
+    setRec(null);
+    setPipe(null);
+  };
+  const removeExclude = (n: number) => { setExcluded(excluded.filter((x) => x !== n)); setRec(null); setPipe(null); };
+  const clearExclude = () => { setExcluded([]); setRec(null); setPipe(null); };
   const onBacktest = () => {
     // 백테스트는 전체 회차 기준(과거 시점마다 직전까지 데이터 사용) — 범위 필터와 무관
     setBackRunning(true);
@@ -488,6 +502,39 @@ export default function App() {
             </div>
           </div>
           <p className="group-foot">끝수 계열 출현 빈도 + 최근 집중 계열</p>
+        </section>
+
+        {/* 제외 숫자 (수동입력) */}
+        <section className="group span-2">
+          <div className="group-header"><span>제외숫자 (수동입력)</span><span className="hd-tag">최대 6개</span></div>
+          <div className="group-card pad">
+            <div className="exclude-input">
+              <input
+                type="number"
+                inputMode="numeric"
+                min={1}
+                max={45}
+                placeholder="1–45"
+                value={exInput}
+                onChange={(e) => setExInput(e.target.value)}
+                onKeyDown={(e) => { if (e.key === "Enter") addExclude(); }}
+              />
+              <button className="btn-tinted" onClick={addExclude} disabled={excluded.length >= 6}>추가</button>
+              {excluded.length > 0 && <button className="btn-tinted" onClick={clearExclude}>초기화</button>}
+            </div>
+            {excluded.length > 0 ? (
+              <div className="exclude-balls">
+                {excluded.map((n) => (
+                  <button key={n} className="ex-ball" onClick={() => removeExclude(n)} aria-label={`${n} 제외 해제`}>
+                    <Ball n={n} />
+                    <span className="ex-ball-x">✕</span>
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <p className="empty">제외할 번호를 입력하면 아래 번호 추천·고급 추천 결과에서 빠집니다</p>
+            )}
+          </div>
         </section>
 
         {/* F5 번호 추천 */}

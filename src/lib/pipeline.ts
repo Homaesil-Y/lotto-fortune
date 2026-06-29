@@ -18,7 +18,8 @@ export interface PipelineResult {
 const flowMul = (s: FlowState) =>
   s === "강세 유지" ? 1.0 : s === "재정비 구간" ? 0.8 : s === "관망" ? 0.6 : s === "변동성 확대" ? 0.5 : 0.35;
 
-export function runPipeline(draws: Draw[]): PipelineResult {
+export function runPipeline(draws: Draw[], exclude: number[] = []): PipelineResult {
+  const ex = new Set(exclude);
   // 모듈 산출
   const flow = moduleA(draws);
   const infl = moduleB(draws);
@@ -51,7 +52,7 @@ export function runPipeline(draws: Draw[]): PipelineResult {
 
   // 7~8단계: 가중 비복원 추출로 후보 조합 다수 생성 → 분산/중심축 점수화
   const sample = () => {
-    const pool = Array.from({ length: 45 }, (_, i) => ({ n: i + 1, w: weights[i + 1] }));
+    const pool = Array.from({ length: 45 }, (_, i) => ({ n: i + 1, w: weights[i + 1] })).filter((p) => !ex.has(p.n));
     const out: number[] = [];
     while (out.length < 6 && pool.length) {
       const tot = pool.reduce((s, x) => s + x.w, 0);
@@ -92,7 +93,9 @@ export function runPipeline(draws: Draw[]): PipelineResult {
 
   return {
     combos,
-    poolSize: Object.values(weights).filter((w) => w > 0).length,
-    notes: ["모듈 C(중심축)·G(체인)은 H 클러스터로 근사함"],
+    poolSize: Array.from({ length: 45 }, (_, i) => i + 1).filter((n) => !ex.has(n) && weights[n] > 0).length,
+    notes: ex.size
+      ? [`제외 ${ex.size}개 반영`, "모듈 C(중심축)·G(체인)은 H 클러스터로 근사함"]
+      : ["모듈 C(중심축)·G(체인)은 H 클러스터로 근사함"],
   };
 }
