@@ -144,9 +144,10 @@ export default function App() {
   if (error)
     return (
       <div className="content">
-        <div className="group">
-          <div className="group-card pad">
-            <p className="empty">데이터를 불러오지 못했습니다 ({error}).<br />한국 환경에서 <code>npm run fetch</code> 로 <code>public/lotto.json</code> 을 먼저 생성하세요.</p>
+        <div className="group span-2">
+          <div className="group-card pad" style={{ textAlign: "center" }}>
+            <p className="empty">데이터를 불러오지 못했어요.<br />네트워크 상태를 확인하고 다시 시도해 주세요.</p>
+            <button className="btn-filled" style={{ marginTop: 14 }} onClick={() => window.location.reload()}>다시 시도</button>
           </div>
         </div>
       </div>
