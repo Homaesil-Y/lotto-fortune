@@ -289,6 +289,18 @@ body {
 .balls-lg .ball { width: 44px; height: 44px; font-size: 17px; }
 .balls-sm .ball { width: 32px; height: 32px; font-size: 14px; }
 .balls-sm { gap: 7px; }
+
+/* 모바일: 최신 당첨번호 / 최근 10회차 로또볼 한 줄 고정 */
+@media (max-width: 480px) {
+  /* 최신 당첨번호 — 공 축소 + 줄바꿈 금지 */
+  .hero-card .balls { flex-wrap: nowrap; gap: 5px; }
+  .hero-card .balls .ball { width: 34px; height: 34px; font-size: 14px; }
+
+  /* 최근 10회차 / 저장한 조합 — 라벨을 위로, 공은 아래 전체폭 한 줄 */
+  .row:has(.balls-sm) { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .row:has(.balls-sm) .balls-sm { flex-wrap: nowrap; gap: 6px; }
+  .row:has(.balls-sm) .balls-sm .ball { width: 30px; height: 30px; font-size: 13px; }
+}
 .b-amber { --c: var(--ball-yellow); }
 .b-blue  { --c: var(--ball-blue); }
 .b-coral { --c: var(--ball-red); }
