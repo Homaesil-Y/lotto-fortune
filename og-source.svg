@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#ffffff"/>
+  <rect width="1200" height="12" fill="#ff375f"/>
+
+  <!-- 로고 -->
+  <rect x="80" y="84" width="104" height="104" rx="24" fill="#ff375f"/>
+  <circle cx="152" cy="120" r="19" fill="#ffffff" opacity="0.5"/>
+  <circle cx="126" cy="146" r="27" fill="#ffffff"/>
+  <circle cx="114" cy="134" r="8" fill="#ffd0d9"/>
+  <text x="126" y="148" text-anchor="middle" dominant-baseline="central" font-family="'Apple SD Gothic Neo', Helvetica, Arial, sans-serif" font-size="30" font-weight="700" fill="#ff375f">6</text>
+
+  <!-- 타이틀 -->
+  <text x="214" y="128" font-family="'Apple SD Gothic Neo', Helvetica, Arial, sans-serif" font-size="78" font-weight="800" fill="#181b27">로또 포춘</text>
+  <text x="216" y="180" font-family="Helvetica, Arial, sans-serif" font-size="33" font-weight="500" fill="#8a8f9c" letter-spacing="1">Lotto Fortune</text>
+
+  <!-- 태그라인 -->
+  <text x="80" y="320" font-family="'Apple SD Gothic Neo', Helvetica, Arial, sans-serif" font-size="42" font-weight="600" fill="#3a3f4c">방법론 기반 로또 통계 분석 · 시뮬레이터</text>
+
+  <!-- 로또 공 -->
+  <g font-family="'Apple SD Gothic Neo', Helvetica, Arial, sans-serif" font-size="36" font-weight="700" fill="#ffffff" text-anchor="middle">
+    <circle cx="124" cy="448" r="44" fill="#f6a609"/><text x="124" y="448" dominant-baseline="central">5</text>
+    <circle cx="236" cy="448" r="44" fill="#4a93e0"/><text x="236" y="448" dominant-baseline="central">14</text>
+    <circle cx="348" cy="448" r="44" fill="#ec5f73"/><text x="348" y="448" dominant-baseline="central">23</text>
+    <circle cx="460" cy="448" r="44" fill="#8b909c"/><text x="460" y="448" dominant-baseline="central">31</text>
+    <circle cx="572" cy="448" r="44" fill="#8b909c"/><text x="572" y="448" dominant-baseline="central">38</text>
+    <circle cx="684" cy="448" r="44" fill="#57b95a"/><text x="684" y="448" dominant-baseline="central">45</text>
+  </g>
+
+  <!-- 면책 / 도메인 -->
+  <text x="80" y="582" font-family="'Apple SD Gothic Neo', Helvetica, Arial, sans-serif" font-size="26" fill="#aab0bd">과거 데이터 분석 · 로또는 독립 시행이라 당첨을 보장하지 않습니다</text>
+  <text x="1120" y="582" text-anchor="end" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="#c4c8d0">lotto-fortune-beta.vercel.app</text>
+</svg>
