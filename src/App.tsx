@@ -191,8 +191,7 @@ export default function App() {
         <div className="brand">
           <Logo />
           <div className="brand-titles">
-            <h1 className="large-title">로또 포춘</h1>
-            <span className="brand-en">Lotto Fortune</span>
+            <h1 className="large-title">호매실양사장's 로또 연구소</h1>
           </div>
         </div>
         <p className="nav-sub">
@@ -654,7 +653,7 @@ export default function App() {
         )}
 
         <p className="footer span-2">과거 데이터 분석이며 로또는 독립 시행이라 당첨을 보장하지 않습니다.</p>
-        <p className="copyright span-2">© 2026 로또 포춘 (Lotto Fortune). All rights reserved.</p>
+        <p className="copyright span-2">© 2026 호매실양사장's 로또 연구소. All rights reserved.</p>
       </main>
     </div>
   );

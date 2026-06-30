@@ -10,8 +10,7 @@
   <text x="126" y="148" text-anchor="middle" dominant-baseline="central" font-family="'Apple SD Gothic Neo', Helvetica, Arial, sans-serif" font-size="30" font-weight="700" fill="#ff375f">6</text>
 
   <!-- 타이틀 -->
-  <text x="214" y="128" font-family="'Apple SD Gothic Neo', Helvetica, Arial, sans-serif" font-size="78" font-weight="800" fill="#181b27">로또 포춘</text>
-  <text x="216" y="180" font-family="Helvetica, Arial, sans-serif" font-size="33" font-weight="500" fill="#8a8f9c" letter-spacing="1">Lotto Fortune</text>
+  <text x="214" y="156" font-family="'Apple SD Gothic Neo', Helvetica, Arial, sans-serif" font-size="58" font-weight="800" fill="#181b27">호매실양사장's 로또 연구소</text>
 
   <!-- 태그라인 -->
   <text x="80" y="320" font-family="'Apple SD Gothic Neo', Helvetica, Arial, sans-serif" font-size="42" font-weight="600" fill="#3a3f4c">방법론 기반 로또 통계 분석 · 시뮬레이터</text>

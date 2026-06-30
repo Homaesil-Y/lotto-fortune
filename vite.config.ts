@@ -10,8 +10,8 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["pwa-icon.svg"],
       manifest: {
-        name: "로또 포춘 (Lotto Fortune)",
-        short_name: "로또 포춘",
+        name: "호매실양사장's 로또 연구소",
+        short_name: "로또 연구소",
         description: "방법론 기반 로또 통계 분석·시뮬레이터",
         lang: "ko",
         theme_color: "#ff375f",
