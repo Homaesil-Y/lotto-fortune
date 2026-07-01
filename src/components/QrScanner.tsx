@@ -13,17 +13,27 @@ interface QrResult {
 
 function parseLottoQr(text: string): { drwNo: number; myNumbers: number[] } | null {
   try {
-    const url = new URL(text);
-    const v = url.searchParams.get("v");
+    // QR 텍스트에서 v 파라미터 추출 (URL 형식 또는 raw 형식 모두 허용)
+    let v: string | null = null;
+    try {
+      v = new URL(text).searchParams.get("v");
+    } catch {
+      const m = text.match(/[?&]v=([^&]+)/);
+      if (m) v = m[1];
+    }
     if (!v) return null;
+
     const qIdx = v.indexOf("q");
     if (qIdx < 0) return null;
     const drwNo = parseInt(v.slice(0, qIdx), 10);
     const numsStr = v.slice(qIdx + 1);
-    if (isNaN(drwNo) || numsStr.length < 18) return null;
+    if (isNaN(drwNo) || !numsStr) return null;
+
+    // 동행복권 QR: 번호 2자리 패딩(×6=12자) 또는 3자리 패딩(×6=18자) 모두 지원
+    const step = numsStr.length <= 12 ? 2 : 3;
     const myNumbers: number[] = [];
-    for (let i = 0; i < numsStr.length; i += 3) {
-      const n = parseInt(numsStr.slice(i, i + 3), 10);
+    for (let i = 0; i + step <= numsStr.length; i += step) {
+      const n = parseInt(numsStr.slice(i, i + step), 10);
       if (!isNaN(n) && n >= 1 && n <= 45) myNumbers.push(n);
     }
     if (myNumbers.length !== 6) return null;
@@ -72,13 +82,17 @@ function CameraView({ draws, onResult }: { draws: Draw[]; onResult: (r: QrResult
       if (stopped) return;
       const v = videoRef.current;
       const c = canvasRef.current;
-      if (!v || !c || v.readyState < 2) { rafId = requestAnimationFrame(tick); return; }
-      c.width = v.videoWidth;
-      c.height = v.videoHeight;
-      const ctx = c.getContext("2d")!;
+      if (!v || !c || v.readyState < 2 || v.videoWidth === 0) {
+        rafId = requestAnimationFrame(tick);
+        return;
+      }
+      if (c.width !== v.videoWidth) c.width = v.videoWidth;
+      if (c.height !== v.videoHeight) c.height = v.videoHeight;
+      const ctx = c.getContext("2d");
+      if (!ctx) { rafId = requestAnimationFrame(tick); return; }
       ctx.drawImage(v, 0, 0);
       const img = ctx.getImageData(0, 0, c.width, c.height);
-      const code = jsQR(img.data, img.width, img.height);
+      const code = jsQR(img.data, img.width, img.height, { inversionAttempts: "dontInvert" });
       if (code?.data) {
         const parsed = parseLottoQr(code.data);
         if (parsed) {
