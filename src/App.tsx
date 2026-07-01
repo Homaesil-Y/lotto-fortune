@@ -195,7 +195,8 @@ export default function App() {
         <div className="brand">
           <Logo />
           <div className="brand-titles">
-            <h1 className="large-title">호매실양사장's 로또 연구소</h1>
+            <span className="brand-owner">호매실양사장's</span>
+            <h1 className="large-title">로또 연구소</h1>
           </div>
         </div>
         {range && (
