@@ -1,5 +1,6 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from "react";
 import type { Draw, RecommendMode } from "./types";
+import QrScanner from "./components/QrScanner";
 import { NUMS, frequency, gaps, patterns, latest, consecutive, hotColdByDraw } from "./lib/stats";
 import { recommend, type Recommendation } from "./lib/recommend";
 import { moduleA, moduleD, moduleF, moduleE, moduleH, moduleB } from "./lib/modules";
@@ -80,6 +81,7 @@ export default function App() {
   const [exInput, setExInput] = useState("");
   const [back, setBack] = useState<BacktestResult | null>(null); // 백테스트 결과
   const [backRunning, setBackRunning] = useState(false);
+  const [qrOpen, setQrOpen] = useState(false);
 
   useEffect(() => {
     fetch("/lotto.json")
@@ -187,12 +189,16 @@ export default function App() {
 
   return (
     <div className="app">
+      {qrOpen && draws && <QrScanner draws={draws} onClose={() => setQrOpen(false)} />}
       <header className="nav">
         <div className="brand">
           <Logo />
           <div className="brand-titles">
             <h1 className="large-title">호매실양사장's 로또 연구소</h1>
           </div>
+          <button className="qr-btn" onClick={() => setQrOpen(true)} aria-label="복권 QR 스캔">
+            <span className="qr-btn-icon">📷</span>QR 당첨확인
+          </button>
         </div>
         <p className="nav-sub">
           {stats.total === draws!.length
@@ -311,9 +317,9 @@ export default function App() {
           <p className="group-foot">실제 비율 / 기대 비율(번호 개수 비례)</p>
         </section>
 
-        {/* 모듈 F: 이진 출현 히트맵 */}
+        {/* 모듈 F: 이전 출현 히트맵 */}
         <section className="group span-2">
-          <div className="group-header"><span>이진 출현 히트맵</span><span className="hd-tag">모듈 F · 최근 {stats.matrix.window}회</span></div>
+          <div className="group-header"><span>이전 출현 히트맵</span><span className="hd-tag">모듈 F · 최근 {stats.matrix.window}회</span></div>
           <div className="group-card pad">
             <div className="heatgrid">
               {stats.matrix.cells.map((c) => {
