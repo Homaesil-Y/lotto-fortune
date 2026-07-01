@@ -1,63 +1,7 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import jsQR from "jsqr";
-import type { Draw } from "../types";
 
-interface QrResult {
-  drwNo: number;
-  myNumbers: number[];
-  draw: Draw | null;
-  prize: string;
-  matchCount: number;
-  hasBonus: boolean;
-}
-
-function parseLottoQr(text: string): { drwNo: number; myNumbers: number[] } | null {
-  try {
-    // QR 텍스트에서 v 파라미터 추출 (URL 형식 또는 raw 형식 모두 허용)
-    let v: string | null = null;
-    try {
-      v = new URL(text).searchParams.get("v");
-    } catch {
-      const m = text.match(/[?&]v=([^&]+)/);
-      if (m) v = m[1];
-    }
-    if (!v) return null;
-
-    const qIdx = v.indexOf("q");
-    if (qIdx < 0) return null;
-    const drwNo = parseInt(v.slice(0, qIdx), 10);
-    const numsStr = v.slice(qIdx + 1);
-    if (isNaN(drwNo) || !numsStr) return null;
-
-    // 동행복권 QR: 번호 2자리 패딩(×6=12자) 또는 3자리 패딩(×6=18자) 모두 지원
-    const step = numsStr.length <= 12 ? 2 : 3;
-    const myNumbers: number[] = [];
-    for (let i = 0; i + step <= numsStr.length; i += step) {
-      const n = parseInt(numsStr.slice(i, i + step), 10);
-      if (!isNaN(n) && n >= 1 && n <= 45) myNumbers.push(n);
-    }
-    if (myNumbers.length !== 6) return null;
-    return { drwNo, myNumbers };
-  } catch {
-    return null;
-  }
-}
-
-function getPrize(myNumbers: number[], draw: Draw) {
-  const winSet = new Set(draw.numbers);
-  const matchCount = myNumbers.filter((n) => winSet.has(n)).length;
-  const hasBonus = myNumbers.includes(draw.bonus);
-  const prize =
-    matchCount === 6 ? "1등"
-    : matchCount === 5 && hasBonus ? "2등"
-    : matchCount === 5 ? "3등"
-    : matchCount === 4 ? "4등"
-    : matchCount === 3 ? "5등"
-    : "미당첨";
-  return { prize, matchCount, hasBonus };
-}
-
-function CameraView({ draws, onResult }: { draws: Draw[]; onResult: (r: QrResult) => void }) {
+function CameraView({ onDetect }: { onDetect: (url: string) => void }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [camError, setCamError] = useState<string | null>(null);
@@ -94,17 +38,10 @@ function CameraView({ draws, onResult }: { draws: Draw[]; onResult: (r: QrResult
       const img = ctx.getImageData(0, 0, c.width, c.height);
       const code = jsQR(img.data, img.width, img.height, { inversionAttempts: "dontInvert" });
       if (code?.data) {
-        const parsed = parseLottoQr(code.data);
-        if (parsed) {
-          stopped = true;
-          stream?.getTracks().forEach((t) => t.stop());
-          const draw = draws.find((d) => d.drwNo === parsed.drwNo) ?? null;
-          const { prize, matchCount, hasBonus } = draw
-            ? getPrize(parsed.myNumbers, draw)
-            : { prize: "데이터 없음", matchCount: 0, hasBonus: false };
-          onResult({ ...parsed, draw, prize, matchCount, hasBonus });
-          return;
-        }
+        stopped = true;
+        stream?.getTracks().forEach((t) => t.stop());
+        onDetect(code.data);
+        return;
       }
       rafId = requestAnimationFrame(tick);
     }
@@ -114,7 +51,7 @@ function CameraView({ draws, onResult }: { draws: Draw[]; onResult: (r: QrResult
       cancelAnimationFrame(rafId);
       stream?.getTracks().forEach((t) => t.stop());
     };
-  }, [draws, onResult]);
+  }, [onDetect]);
 
   if (camError) {
     return (
@@ -140,24 +77,13 @@ function CameraView({ draws, onResult }: { draws: Draw[]; onResult: (r: QrResult
   );
 }
 
-const PRIZE_LABEL: Record<string, string> = {
-  "1등": "🏆 1등 당첨!",
-  "2등": "🥈 2등 당첨!",
-  "3등": "🥉 3등 당첨!",
-  "4등": "🎉 4등 당첨!",
-  "5등": "✅ 5등 당첨!",
-  "미당첨": "😢 미당첨",
-  "데이터 없음": "⚠️ 회차 데이터 없음",
-};
-
-export default function QrScanner({ draws, onClose }: { draws: Draw[]; onClose: () => void }) {
-  const [result, setResult] = useState<QrResult | null>(null);
+export default function QrScanner({ onClose }: { onClose: () => void }) {
+  const [scanned, setScanned] = useState<string | null>(null);
   const [scanKey, setScanKey] = useState(0);
 
-  const handleResult = useCallback((r: QrResult) => setResult(r), []);
-  const handleReset = () => { setResult(null); setScanKey((k) => k + 1); };
-
-  const isWin = result && result.prize !== "미당첨" && result.prize !== "데이터 없음";
+  const handleDetect = (text: string) => setScanned(text);
+  const handleReset = () => { setScanned(null); setScanKey((k) => k + 1); };
+  const handleOpen = () => { if (scanned) window.open(scanned, "_blank", "noopener"); };
 
   return (
     <div className="qr-overlay" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
@@ -167,40 +93,16 @@ export default function QrScanner({ draws, onClose }: { draws: Draw[]; onClose: 
           <button className="qr-close" onClick={onClose} aria-label="닫기">✕</button>
         </div>
 
-        {!result ? (
-          <CameraView key={scanKey} draws={draws} onResult={handleResult} />
+        {!scanned ? (
+          <CameraView key={scanKey} onDetect={handleDetect} />
         ) : (
           <div className="qr-result-area">
-            <div className={`qr-prize-badge ${isWin ? "qr-win" : "qr-lose"}`}>
-              {PRIZE_LABEL[result.prize] ?? result.prize}
-            </div>
-
-            <p className="qr-drwno">
-              {result.drwNo}회{result.draw ? ` · ${result.draw.drwNoDate}` : ""}
-            </p>
-
-            <div className="qr-my-numbers">
-              {result.myNumbers.map((n) => {
-                const isMatch = result.draw?.numbers.includes(n);
-                const isBonus = !isMatch && result.draw?.bonus === n;
-                return (
-                  <span
-                    key={n}
-                    className={`qr-num${isMatch ? " qr-match" : isBonus ? " qr-bonus" : ""}`}
-                  >
-                    {n}
-                  </span>
-                );
-              })}
-            </div>
-
-            {result.draw && (
-              <p className="qr-match-label">
-                {result.matchCount}개 일치{result.hasBonus ? " + 보너스" : ""}
-              </p>
-            )}
-
-            <button className="btn-filled" style={{ marginTop: 20 }} onClick={handleReset}>
+            <div className="qr-prize-badge qr-detected">QR 인식 완료</div>
+            <p className="qr-drwno qr-url-text">{scanned}</p>
+            <button className="btn-filled" onClick={handleOpen}>
+              당첨 결과 확인하기
+            </button>
+            <button className="btn-tinted" style={{ width: "100%", marginTop: 8 }} onClick={handleReset}>
               다시 스캔
             </button>
           </div>

@@ -558,4 +558,9 @@ code {
 .qr-match-label {
   font-size: 13px; color: var(--label-2); margin: 0;
 }
-.qr-result-area .btn-filled { width: auto; padding: 11px 32px; font-size: 15px; }
+.qr-result-area .btn-filled { width: 100%; font-size: 16px; }
+.qr-detected { background: #e2f6ea; color: #1c7a45; }
+.qr-url-text {
+  font-size: 12px; color: var(--label-3); word-break: break-all;
+  text-align: center; margin: 4px 0 16px; line-height: 1.5;
+}

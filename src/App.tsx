@@ -189,7 +189,7 @@ export default function App() {
 
   return (
     <div className="app">
-      {qrOpen && draws && <QrScanner draws={draws} onClose={() => setQrOpen(false)} />}
+      {qrOpen && <QrScanner onClose={() => setQrOpen(false)} />}
       <header className="nav">
         <div className="brand">
           <Logo />
