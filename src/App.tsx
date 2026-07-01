@@ -190,15 +190,13 @@ export default function App() {
   return (
     <div className="app">
       {qrOpen && <QrScanner onClose={() => setQrOpen(false)} />}
+      <button className="qr-fab" onClick={() => setQrOpen(true)} aria-label="복권 QR 당첨확인">📷</button>
       <header className="nav">
         <div className="brand">
           <Logo />
           <div className="brand-titles">
             <h1 className="large-title">호매실양사장's 로또 연구소</h1>
           </div>
-          <button className="qr-btn" onClick={() => setQrOpen(true)} aria-label="복권 QR 스캔">
-            <span className="qr-btn-icon">📷</span>QR 당첨확인
-          </button>
         </div>
         <p className="nav-sub">
           {stats.total === draws!.length

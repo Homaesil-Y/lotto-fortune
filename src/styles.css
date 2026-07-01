@@ -65,8 +65,9 @@ body {
 .logo-tile { fill: var(--tint); }
 .logo-num { fill: var(--tint); font-size: 11px; font-weight: 700; font-family: inherit; }
 .large-title {
-  margin: 0; font-size: clamp(28px, 7vw, 34px); font-weight: 700;
+  margin: 0; font-size: clamp(20px, 5.4vw, 34px); font-weight: 700;
   letter-spacing: -0.022em; line-height: 1.1;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .nav-sub { margin: 12px 0 14px; font-size: 15px; color: var(--label-2); }
 
@@ -426,18 +427,17 @@ code {
 }
 
 /* ── QR 스캐너 ── */
-.qr-btn {
-  border: none; background: var(--fill); color: var(--label);
-  border-radius: 11px; padding: 8px 14px;
-  font-size: 14px; font-weight: 600; font-family: inherit;
-  cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
-  transition: background .15s, transform .1s;
-  white-space: nowrap; flex-shrink: 0;
+.qr-fab {
+  position: fixed; bottom: 28px; right: 22px; z-index: 200;
+  border: none; background: var(--tint); color: #fff;
+  border-radius: 50%; width: 54px; height: 54px;
+  font-size: 22px; line-height: 1;
+  cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 18px rgba(255, 55, 95, 0.38);
+  transition: transform .15s, box-shadow .15s;
 }
-.qr-btn:hover { background: var(--fill-strong); }
-.qr-btn:active { transform: scale(.97); }
-.qr-btn-icon { font-size: 16px; line-height: 1; }
-@media (pointer: fine) { .qr-btn { display: none; } }
+.qr-fab:active { transform: scale(.91); box-shadow: 0 2px 8px rgba(255, 55, 95, 0.25); }
+@media (pointer: fine) { .qr-fab { display: none; } }
 
 .qr-overlay {
   position: fixed; inset: 0; z-index: 900;
