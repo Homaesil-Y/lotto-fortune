@@ -567,6 +567,21 @@ export default function App() {
           </div>
         </section>
 
+        {/* 저장한 조합 */}
+        {saved.length > 0 && (
+          <section className="group span-2">
+            <div className="group-header">
+              <span>저장한 조합 ({saved.length})</span>
+              <button className="header-action" onClick={onClearSaved}>전체 삭제</button>
+            </div>
+            <div className="group-card list">
+              {saved.map((combo, i) => (
+                <div key={i} className="row"><Balls nums={combo} size="sm" /></div>
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* 고급 추천 — 9단계 파이프라인 */}
         <section className="group span-2">
           <div className="group-header"><span>🔬 고급 추천</span><span className="hd-tag">9단계 파이프라인</span></div>
@@ -635,21 +650,6 @@ export default function App() {
             )}
           </div>
         </section>
-
-        {/* 저장한 조합 */}
-        {saved.length > 0 && (
-          <section className="group span-2">
-            <div className="group-header">
-              <span>저장한 조합 ({saved.length})</span>
-              <button className="header-action" onClick={onClearSaved}>전체 삭제</button>
-            </div>
-            <div className="group-card list">
-              {saved.map((combo, i) => (
-                <div key={i} className="row"><Balls nums={combo} size="sm" /></div>
-              ))}
-            </div>
-          </section>
-        )}
 
         <p className="footer span-2">과거 데이터 분석이며 로또는 독립 시행이라 당첨을 보장하지 않습니다.</p>
         <p className="copyright span-2">© 2026 호매실양사장's 로또 연구소. All rights reserved.</p>
