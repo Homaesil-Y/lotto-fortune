@@ -198,11 +198,6 @@ export default function App() {
             <h1 className="large-title">호매실양사장's 로또 연구소</h1>
           </div>
         </div>
-        <p className="nav-sub">
-          {stats.total === draws!.length
-            ? `전체 ${draws!.length}회차 분석`
-            : `${range!.start}–${range!.end}회 · ${stats.total}회차 분석`}
-        </p>
         {range && (
           <div className="filter">
             <span className="filter-label">회차 범위</span>
