@@ -1,6 +1,24 @@
 import { useEffect, useRef, useState } from "react";
 import jsQR from "jsqr";
 
+// BarcodeDetector 타입 (브라우저 네이티브 API — TS 기본 포함 안 됨)
+declare class BarcodeDetector {
+  constructor(options?: { formats: string[] });
+  detect(src: HTMLVideoElement | HTMLCanvasElement): Promise<Array<{ rawValue: string }>>;
+  static getSupportedFormats(): Promise<string[]>;
+}
+
+async function makeBarcodeDetector(): Promise<BarcodeDetector | null> {
+  if (!("BarcodeDetector" in window)) return null;
+  try {
+    const formats = await BarcodeDetector.getSupportedFormats();
+    if (!formats.includes("qr_code")) return null;
+    return new BarcodeDetector({ formats: ["qr_code"] });
+  } catch {
+    return null;
+  }
+}
+
 function CameraView({ onDetect }: { onDetect: (url: string) => void }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -10,9 +28,12 @@ function CameraView({ onDetect }: { onDetect: (url: string) => void }) {
     let stopped = false;
     let rafId = 0;
     let stream: MediaStream | null = null;
+    let detector: BarcodeDetector | null = null;
+
+    makeBarcodeDetector().then((d) => { detector = d; });
 
     navigator.mediaDevices
-      .getUserMedia({ video: { facingMode: { ideal: "environment" } } })
+      .getUserMedia({ video: { facingMode: { ideal: "environment" }, width: { ideal: 1280 } } })
       .then((s) => {
         if (stopped) { s.getTracks().forEach((t) => t.stop()); return; }
         stream = s;
@@ -22,27 +43,47 @@ function CameraView({ onDetect }: { onDetect: (url: string) => void }) {
       })
       .catch(() => setCamError("카메라 접근 권한이 필요합니다.\n브라우저 설정에서 카메라를 허용해 주세요."));
 
-    function tick() {
+    async function tick() {
       if (stopped) return;
       const v = videoRef.current;
       const c = canvasRef.current;
-      if (!v || !c || v.readyState < 2 || v.videoWidth === 0) {
+      if (!v || v.readyState < 2 || v.videoWidth === 0) {
         rafId = requestAnimationFrame(tick);
         return;
       }
-      if (c.width !== v.videoWidth) c.width = v.videoWidth;
-      if (c.height !== v.videoHeight) c.height = v.videoHeight;
-      const ctx = c.getContext("2d");
-      if (!ctx) { rafId = requestAnimationFrame(tick); return; }
-      ctx.drawImage(v, 0, 0);
-      const img = ctx.getImageData(0, 0, c.width, c.height);
-      const code = jsQR(img.data, img.width, img.height, { inversionAttempts: "dontInvert" });
-      if (code?.data) {
-        stopped = true;
-        stream?.getTracks().forEach((t) => t.stop());
-        onDetect(code.data);
-        return;
+
+      try {
+        let text: string | null = null;
+
+        // 1순위: 네이티브 BarcodeDetector (Android Chrome 등)
+        if (detector) {
+          const results = await detector.detect(v);
+          if (results.length > 0) text = results[0].rawValue;
+        }
+
+        // 2순위: jsQR 폴백 (iOS Safari 등)
+        if (!text && c) {
+          if (c.width !== v.videoWidth) c.width = v.videoWidth;
+          if (c.height !== v.videoHeight) c.height = v.videoHeight;
+          const ctx = c.getContext("2d");
+          if (ctx) {
+            ctx.drawImage(v, 0, 0);
+            const img = ctx.getImageData(0, 0, c.width, c.height);
+            const code = jsQR(img.data, img.width, img.height, { inversionAttempts: "attemptBoth" });
+            if (code?.data) text = code.data;
+          }
+        }
+
+        if (text) {
+          stopped = true;
+          stream?.getTracks().forEach((t) => t.stop());
+          onDetect(text);
+          return;
+        }
+      } catch {
+        // 스캔 오류는 무시하고 계속 시도
       }
+
       rafId = requestAnimationFrame(tick);
     }
 
@@ -81,7 +122,6 @@ export default function QrScanner({ onClose }: { onClose: () => void }) {
   const [scanned, setScanned] = useState<string | null>(null);
   const [scanKey, setScanKey] = useState(0);
 
-  const handleDetect = (text: string) => setScanned(text);
   const handleReset = () => { setScanned(null); setScanKey((k) => k + 1); };
   const handleOpen = () => { if (scanned) window.open(scanned, "_blank", "noopener"); };
 
@@ -94,7 +134,7 @@ export default function QrScanner({ onClose }: { onClose: () => void }) {
         </div>
 
         {!scanned ? (
-          <CameraView key={scanKey} onDetect={handleDetect} />
+          <CameraView key={scanKey} onDetect={setScanned} />
         ) : (
           <div className="qr-result-area">
             <div className="qr-prize-badge qr-detected">QR 인식 완료</div>
