@@ -77,6 +77,15 @@ body {
   background: linear-gradient(145deg, #c4003d 0%, #ff375f 60%, #ff6b6b 100%);
   padding: 0;
 }
+/* 다크모드 — 딥 와인 톤으로 차분하게 */
+@media (prefers-color-scheme: dark) {
+  .hero-section {
+    background: linear-gradient(145deg, #1f0210 0%, #3c081c 55%, #521026 100%);
+  }
+  .hero-section .balls-lg .ball {
+    box-shadow: 0 5px 16px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.14) inset;
+  }
+}
 .hero-inner {
   max-width: 880px; margin: 0 auto;
   padding: 18px 1.25rem 22px;
