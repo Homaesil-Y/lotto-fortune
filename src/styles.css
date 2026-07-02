@@ -112,12 +112,26 @@ body {
   box-shadow: 0 4px 12px rgba(0,0,0,0.3), 0 1px 0 rgba(255,255,255,0.18) inset;
 }
 .hero-section .plus { color: rgba(255,255,255,0.6); font-size: 18px; flex-shrink: 0; }
-/* PC — 리스트 볼(32px)의 1.3배인 42px 고정, 좌측 정렬 */
+/* PC — 풀블리드 배너 → 라운드 카드 */
 @media (min-width: 640px) {
+  .hero-section {
+    background: transparent;
+    padding: 1.25rem 1.25rem 0;
+  }
+  .hero-inner {
+    background: linear-gradient(145deg, #c4003d 0%, #ff375f 60%, #ff6b6b 100%);
+    border-radius: 20px;
+    padding: 20px 24px 24px;
+  }
   .hero-section .balls-lg { width: auto; gap: 9px; }
   .hero-section .balls-lg .ball {
     flex: 0 0 auto; width: 42px; height: 42px; aspect-ratio: auto;
     font-size: 16px;
+  }
+}
+@media (prefers-color-scheme: dark) and (min-width: 640px) {
+  .hero-inner {
+    background: linear-gradient(145deg, #1f0210 0%, #3c081c 55%, #521026 100%);
   }
 }
 
