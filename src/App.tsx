@@ -204,9 +204,9 @@ export default function App() {
       {/* 최신 당첨번호 — 상단 풀블록 */}
       <section className="hero-section">
         <div className="hero-inner">
-          <p className="hero-label">최신 당첨번호</p>
-          <div className="hero-row">
-            <span className="hero-drwno">{stats.latest.drwNo}<span className="hero-drwno-unit">회</span></span>
+          <div className="hero-meta">
+            <span className="hero-label">최신 당첨번호</span>
+            <span className="hero-drwno">{stats.latest.drwNo}회</span>
             <span className="hero-date">{stats.latest.drwNoDate}</span>
           </div>
           <Balls nums={stats.latest.numbers} bonus={stats.latest.bonus} size="lg" />
