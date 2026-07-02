@@ -74,35 +74,24 @@ body {
 
 /* 최신 당첨번호 히어로 */
 .hero-section {
-  background: #0e0e14;
+  background: linear-gradient(145deg, #c4003d 0%, #ff375f 60%, #ff6b6b 100%);
   padding: 0;
-  position: relative;
-  overflow: hidden;
-}
-.hero-section::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse 100% 160% at 50% 130%, rgba(255,55,95,0.14) 0%, transparent 65%);
-  pointer-events: none;
 }
 .hero-inner {
   max-width: 880px; margin: 0 auto;
-  padding: 20px 1.25rem 24px;
-  position: relative;
+  padding: 18px 1.25rem 22px;
 }
 .hero-meta {
-  display: flex; align-items: center; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;
+  display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px;
 }
-.hero-label {
-  font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.35);
-  text-transform: uppercase; letter-spacing: 0.1em;
-}
-.hero-meta-divider { color: rgba(255,255,255,0.15); font-size: 12px; }
 .hero-section .hero-drwno {
-  font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.7); letter-spacing: -0.01em;
+  font-size: 28px; font-weight: 800; color: #fff;
+  letter-spacing: -0.02em; line-height: 1;
 }
-.hero-section .hero-date { font-size: 13px; color: rgba(255,255,255,0.3); }
+.hero-section .hero-drwno em {
+  font-style: normal; font-size: 17px; font-weight: 700; margin-left: 1px;
+}
+.hero-section .hero-date { font-size: 13px; color: rgba(255,255,255,0.75); }
 
 /* 볼 — 너비 가득 채우기 */
 .hero-section .balls-lg {
@@ -111,9 +100,9 @@ body {
 .hero-section .balls-lg .ball {
   flex: 1; width: auto; height: auto; aspect-ratio: 1;
   font-size: clamp(14px, 5vw, 26px);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.55), 0 1px 0 rgba(255,255,255,0.12) inset;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3), 0 1px 0 rgba(255,255,255,0.18) inset;
 }
-.hero-section .plus { color: rgba(255,255,255,0.3); font-size: 18px; flex-shrink: 0; }
+.hero-section .plus { color: rgba(255,255,255,0.6); font-size: 18px; flex-shrink: 0; }
 
 /* 회차 범위 필터 바 */
 .filter-bar {

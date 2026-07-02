@@ -205,9 +205,8 @@ export default function App() {
       <section className="hero-section">
         <div className="hero-inner">
           <div className="hero-meta">
-            <span className="hero-label">최신 당첨번호</span>
-            <span className="hero-drwno">{stats.latest.drwNo}회</span>
-            <span className="hero-date">{stats.latest.drwNoDate}</span>
+            <span className="hero-drwno">{stats.latest.drwNo}<em>회</em></span>
+            <span className="hero-date">{stats.latest.drwNoDate} 추첨</span>
           </div>
           <Balls nums={stats.latest.numbers} bonus={stats.latest.bonus} size="lg" />
         </div>
