@@ -76,6 +76,7 @@ body {
 .hero-section {
   background: linear-gradient(145deg, #c4003d 0%, #ff375f 60%, #ff6b6b 100%);
   padding: 0;
+  margin-bottom: 1rem;
 }
 /* 다크모드 — 딥 와인 톤으로 차분하게 */
 @media (prefers-color-scheme: dark) {
@@ -130,8 +131,8 @@ body {
   }
   .hero-section .balls-lg { width: auto; gap: 9px; }
   .hero-section .balls-lg .ball {
-    flex: 0 0 auto; width: 42px; height: 42px; aspect-ratio: auto;
-    font-size: 16px;
+    flex: 0 0 auto; width: 50px; height: 50px; aspect-ratio: auto;
+    font-size: 19px;
   }
 }
 @media (prefers-color-scheme: dark) and (min-width: 640px) {
@@ -144,7 +145,6 @@ body {
 .filter-bar {
   max-width: 880px; margin: 0 auto;
   padding: 0 1.25rem;
-  border-bottom: 1px solid var(--separator);
 }
 /* 회차 범위 필터 */
 .filter {
