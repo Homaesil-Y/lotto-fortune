@@ -253,7 +253,10 @@ export default function App() {
         <section className="group span-2">
           <div className="group-header">최신 당첨번호</div>
           <div className="group-card pad hero-card">
-            <div className="card-meta">{stats.latest.drwNo}회 · {stats.latest.drwNoDate}</div>
+            <div className="hero-row">
+              <span className="hero-drwno">{stats.latest.drwNo}<span className="hero-drwno-unit">회</span></span>
+              <span className="hero-date">{stats.latest.drwNoDate}</span>
+            </div>
             <Balls nums={stats.latest.numbers} bonus={stats.latest.bonus} size="lg" />
           </div>
         </section>

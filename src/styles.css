@@ -275,6 +275,10 @@ body {
 .row-value { font-size: 17px; color: var(--label-2); text-align: right; }
 
 .card-meta { font-size: 15px; color: var(--label-2); margin-bottom: 12px; }
+.hero-row { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 14px; }
+.hero-drwno { font-size: 42px; font-weight: 800; letter-spacing: -0.03em; line-height: 1; }
+.hero-drwno-unit { font-size: 22px; font-weight: 600; letter-spacing: -0.01em; margin-left: 2px; }
+.hero-date { font-size: 14px; color: var(--label-2); align-self: flex-end; padding-bottom: 4px; }
 .card-foot { font-size: 13px; color: var(--label-2); margin-top: 12px; }
 .empty { font-size: 15px; color: var(--label-2); line-height: 1.6; margin: 0; }
 
