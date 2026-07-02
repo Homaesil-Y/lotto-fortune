@@ -53,7 +53,7 @@ body {
 
 /* 네비게이션 — 라지 타이틀 */
 .nav {
-  max-width: 880px; margin: 0 auto; padding: 1.75rem 1.25rem 0.25rem;
+  max-width: 880px; margin: 0 auto; padding: 1.75rem 1.25rem 1.25rem;
 }
 .brand { display: flex; align-items: center; gap: 11px; }
 .brand-titles { display: flex; flex-direction: column; gap: 1px; }
@@ -72,11 +72,37 @@ body {
 }
 .nav-sub { margin: 12px 0 14px; font-size: 15px; color: var(--label-2); }
 
+/* 최신 당첨번호 히어로 */
+.hero-section {
+  background: linear-gradient(145deg, #c4003d 0%, #ff375f 60%, #ff6b6b 100%);
+  padding: 0;
+}
+.hero-inner {
+  max-width: 880px; margin: 0 auto;
+  padding: 20px 1.25rem 24px;
+}
+.hero-label {
+  font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.7);
+  text-transform: uppercase; letter-spacing: 0.06em; margin: 0 0 10px;
+}
+.hero-section .hero-drwno { color: #fff; }
+.hero-section .hero-date { color: rgba(255,255,255,0.75); }
+.hero-section .hero-row { margin-bottom: 16px; }
+.hero-section .ball { box-shadow: 0 2px 8px rgba(0,0,0,0.25); }
+.hero-section .balls { flex-wrap: nowrap; }
+.hero-section .balls-lg .ball { width: 40px; height: 40px; font-size: 16px; }
+.hero-section .plus { color: rgba(255,255,255,0.5); }
+
+/* 회차 범위 필터 바 */
+.filter-bar {
+  max-width: 880px; margin: 0 auto;
+  padding: 0 1.25rem;
+  border-bottom: 1px solid var(--separator);
+}
 /* 회차 범위 필터 */
 .filter {
   display: flex; align-items: center; gap: 9px; flex-wrap: wrap;
-  margin-top: 20px; padding-top: 18px;
-  border-top: 1px solid var(--separator);
+  padding: 16px 0;
 }
 .filter-label { font-size: 13px; font-weight: 600; color: var(--label-2); }
 .select-wrap { position: relative; display: inline-flex; align-items: center; }

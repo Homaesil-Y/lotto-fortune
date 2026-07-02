@@ -199,7 +199,22 @@ export default function App() {
             <h1 className="large-title">로또 연구소</h1>
           </div>
         </div>
-        {range && (
+      </header>
+
+      {/* 최신 당첨번호 — 상단 풀블록 */}
+      <section className="hero-section">
+        <div className="hero-inner">
+          <p className="hero-label">최신 당첨번호</p>
+          <div className="hero-row">
+            <span className="hero-drwno">{stats.latest.drwNo}<span className="hero-drwno-unit">회</span></span>
+            <span className="hero-date">{stats.latest.drwNoDate}</span>
+          </div>
+          <Balls nums={stats.latest.numbers} bonus={stats.latest.bonus} size="lg" />
+        </div>
+      </section>
+
+      {range && (
+        <div className="filter-bar">
           <div className="filter">
             <span className="filter-label">회차 범위</span>
             <div className="select-wrap">
@@ -245,22 +260,10 @@ export default function App() {
               );
             })()}
           </div>
-        )}
-      </header>
+        </div>
+      )}
 
       <main className="content">
-        {/* F1 최신 당첨번호 */}
-        <section className="group span-2">
-          <div className="group-header">최신 당첨번호</div>
-          <div className="group-card pad hero-card">
-            <div className="hero-row">
-              <span className="hero-drwno">{stats.latest.drwNo}<span className="hero-drwno-unit">회</span></span>
-              <span className="hero-date">{stats.latest.drwNoDate}</span>
-            </div>
-            <Balls nums={stats.latest.numbers} bonus={stats.latest.bonus} size="lg" />
-          </div>
-        </section>
-
         {/* 최근 10회차 */}
         <section className="group span-2">
           <div className="group-header">최근 10회차</div>
